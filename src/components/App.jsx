@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
-
+import Notiflix from 'notiflix';
 import { nanoid } from 'nanoid';
-// state.contacts.id = nanoid();
 
 export class App extends Component {
   state = {
@@ -19,12 +18,16 @@ export class App extends Component {
 
   onSubmitClick = (name, number) => {
     const contact = { id: nanoid(), name, number };
+    const check = this.state.contacts.find(contact => contact.name === name);
+    if (check) {
+      return Notiflix.Notify.failure(`${name} is already in contacts.`);
+    }
     this.setState(prevState => {
       return { contacts: [...prevState.contacts, contact] };
     });
   };
 
-  onInputName = e => {
+  onFilterName = e => {
     this.setState({
       filter: e.currentTarget.value.toLowerCase(),
     });
@@ -56,7 +59,7 @@ export class App extends Component {
         <h1>Phonebook</h1>
         <ContactForm onClick={this.onSubmitClick}></ContactForm>
         <h2>Contacts</h2>
-        <Filter value={filter} onFilterName={this.onInputName}></Filter>
+        <Filter value={filter} onFilter={this.onFilterName}></Filter>
         <ContactList
           contacts={filterContacts}
           onDeleteContact={this.onDelete}
