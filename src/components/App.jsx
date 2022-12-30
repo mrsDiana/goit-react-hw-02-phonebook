@@ -60,15 +60,18 @@ export class App extends Component {
           Phonebook
         </h1>
         <ContactForm onClick={this.onSubmitClick}></ContactForm>
-        <h2
-          style={{
-            color: '#0367a6',
-          }}
-        >
-          Contacts
-        </h2>
-        {!contacts && (
-          <Filter value={filter} onFilter={this.onFilterName}></Filter>
+
+        {contacts.length !== 0 && (
+          <>
+            <h2
+              style={{
+                color: '#0367a6',
+              }}
+            >
+              Contacts
+            </h2>
+            <Filter value={filter} onFilter={this.onFilterName}></Filter>
+          </>
         )}
 
         <ContactList
