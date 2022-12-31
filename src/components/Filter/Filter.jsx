@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Filter as FilterContainer, InputFilter } from './Filter.styled';
 export const Filter = ({ value, onFilter }) => {
   return (
@@ -7,3 +8,7 @@ export const Filter = ({ value, onFilter }) => {
     </FilterContainer>
   );
 };
+Filter.propTypes = {
+  value: PropTypes.string.isRequired,
+  onFilter: PropTypes.func.isRequired,
+}.isRequired;

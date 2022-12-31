@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import Notiflix from 'notiflix';
 import { Formik } from 'formik';
 import {
   PhonebookForm,
@@ -14,8 +16,10 @@ export class ContactForm extends Component {
   };
 
   submitHandler = (values, { resetForm }) => {
-    console.log(values);
     const { name, number } = this.state;
+    if (this.props.onChecked(name)) {
+      return Notiflix.Notify.failure(`${name} is already in contacts.`);
+    }
     this.props.onClick(name, number);
     this.setState({
       name: '',
@@ -68,3 +72,12 @@ export class ContactForm extends Component {
     );
   }
 }
+ContactForm.propTypes = {
+  state: PropTypes.exact({
+    name: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
+  }),
+  submitHandler: PropTypes.func,
+  handelChangeName: PropTypes.func,
+  handelChangeNumber: PropTypes.func,
+};

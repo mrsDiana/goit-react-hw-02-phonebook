@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { nanoid } from 'nanoid';
 import { ContactForm } from './ContactForm/ContactForm';
 import { Filter } from './Filter/Filter';
 import { ContactList } from './ContactList/ContactList';
-import Notiflix from 'notiflix';
-import { nanoid } from 'nanoid';
 
 export class App extends Component {
   state = {
@@ -12,14 +12,15 @@ export class App extends Component {
   };
 
   onSubmitClick = (name, number) => {
-    const contact = { id: nanoid(), name, number };
-    const check = this.state.contacts.find(contact => contact.name === name);
-    if (check) {
-      return Notiflix.Notify.failure(`${name} is already in contacts.`);
-    }
     this.setState(prevState => {
-      return { contacts: [...prevState.contacts, contact] };
+      return {
+        contacts: [...prevState.contacts, { id: nanoid(), name, number }],
+      };
     });
+  };
+
+  onChecked = name => {
+    return this.state.contacts.find(contact => contact.name === name);
   };
 
   onFilterName = e => {
@@ -59,7 +60,10 @@ export class App extends Component {
         >
           Phonebook
         </h1>
-        <ContactForm onClick={this.onSubmitClick}></ContactForm>
+        <ContactForm
+          onChecked={this.onChecked}
+          onClick={this.onSubmitClick}
+        ></ContactForm>
 
         {contacts.length !== 0 && (
           <>
@@ -82,3 +86,20 @@ export class App extends Component {
     );
   }
 }
+App.propTypes = {
+  state: PropTypes.exact({
+    contacts: PropTypes.arrayOf(
+      PropTypes.exact({
+        id: PropTypes.string.isRequired,
+        name: PropTypes.string.isRequired,
+        number: PropTypes.string.isRequired,
+      }).isRequired
+    ).isRequired,
+    filter: '',
+  }).isRequired,
+  onSubmitClick: PropTypes.func,
+  onChecked: PropTypes.func,
+  onFilterName: PropTypes.func,
+  onDelete: PropTypes.func,
+  filterContacts: PropTypes.string.isRequired,
+}.isRequired;
