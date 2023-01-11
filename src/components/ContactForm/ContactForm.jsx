@@ -73,11 +73,6 @@ export class ContactForm extends Component {
   }
 }
 ContactForm.propTypes = {
-  state: PropTypes.exact({
-    name: PropTypes.string.isRequired,
-    number: PropTypes.string.isRequired,
-  }),
-  submitHandler: PropTypes.func,
-  handelChangeName: PropTypes.func,
-  handelChangeNumber: PropTypes.func,
+  onChecked: PropTypes.func,
+  onClick: PropTypes.func,
 };
